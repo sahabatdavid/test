@@ -1,0 +1,37 @@
+# Nama workflow Anda
+name: Deploy and Update Status
+
+# Memicu workflow ini setiap kali ada 'push' ke branch 'main'
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-and-update:
+    runs-on: ubuntu-latest # Menjalankan di server Linux
+
+    steps:
+      # Langkah 1: Checkout kode dari repo
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # -----------------------------------------------------------
+      # --- DI SINILAH LANGKAH DEPLOY ANDA SEHARUSNYA ---
+      # (Misalnya: deploy ke Vercel, Render, AWS, dll.)
+      # Untuk contoh ini, kita lewati dan anggap saja berhasil.
+      - name: Simulate Deployment
+        run: echo "Proyek berhasil di-deploy..."
+      # -----------------------------------------------------------
+
+      # Langkah 2: Update Status di Supabase
+      # Ini adalah "jembatan" yang melapor kembali ke dashboard Anda
+      - name: Update Project Status in Supabase
+        run: |
+          # Menggunakan curl (alat HTTP) untuk memanggil API Supabase
+          curl -X PATCH "${{ secrets.SUPABASE_URL }}/rest/v1/projects?repository_url=eq.${{ github.repositoryUrl }}" \
+          -H "apikey: ${{ secrets.SUPABASE_SERVICE_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{ "status": "Online", "production_url": "https://contoh-deploy.com" }' 
+          
+          # Catatan: ganti 'https://contoh-deploy.com' dengan URL asli dari langkah deploy Anda
