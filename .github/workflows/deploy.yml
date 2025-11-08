@@ -28,7 +28,7 @@ jobs:
       - name: Update Project Status in Supabase
         run: |
           # Menggunakan curl (alat HTTP) untuk memanggil API Supabase
-          curl -X PATCH "${{ secrets.SUPABASE_URL }}/rest/v1/projects?repository_url=eq.${{ github.repositoryUrl }}" \
+          curl -X PATCH "${{ secrets.SUPABASE_URL }}/rest/v1/projects?repository_url=eq.git@github.com:${{ github.repository }}.git" \
           -H "apikey: ${{ secrets.SUPABASE_SERVICE_KEY }}" \
           -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}" \
           -H "Content-Type: application/json" \
